@@ -2,9 +2,21 @@ import { Stack, Box, Flex, Button, Text, VStack, useBreakpointValue , useDisclos
 import bgDefault from './assets/background-image.jpg'
 import UploadImage from './components/UploadImage'
 import PetCard from './components/PetCard'
+import { useState, useEffect } from 'react'
 
 export default function App() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const [photos, setPhotos] = useState([]);
+useEffect(() => {
+  fetch(`your-backend-base-url/all`)
+  .then((res) => {
+    return res.json();
+  })
+  .then((data) => {
+    setPhotos(data);
+  });
+}, []);
 
   return (
     <Box>
@@ -45,8 +57,9 @@ export default function App() {
     </Flex>
 
     <Flex p={4} mt="2rem" align="center" justify="start" flexWrap="wrap" gap="10">
-        <PetCard image={bgDefault} name="Kitten" />
-        <PetCard image={bgDefault} name="Kitten" />
+        {photos.map((photo, index) => 
+        <PetCard key={index} image={`${import.meta.env.VITE_CIVO_OBJECT_ENDPOINT}/${import.meta.env.VITE_CIVO_BUCKET_NAME}/`+photo?.Key} name="Kitten" />        
+      )}
     </Flex>
 
     </Box>

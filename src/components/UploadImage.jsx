@@ -34,8 +34,19 @@ function UploadImage({ isOpen, onClose} ) {
     };
 
     const handleUpload = () => {
-      console.log(formData.image);
-    }
+      const apiFormData = new FormData();
+      apiFormData.append('image', formData.image);
+  
+      fetch(`${import.meta.env.VITE_BACKEND_URL}/upload`, {
+        method: 'PUT',
+        body: apiFormData,
+      })
+        .then((res) => {
+          if(res.status == 200) {
+            onClose();
+          }
+        })
+  }
     
   return (
     <>  
